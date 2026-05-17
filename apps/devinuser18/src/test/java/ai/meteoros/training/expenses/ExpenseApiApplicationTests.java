@@ -1,4 +1,4 @@
-package ai.meteoros.training.expense;
+package ai.meteoros.training.expenses;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package ai.meteoros.training.expense;
+package ai.meteoros.training.expenses;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
