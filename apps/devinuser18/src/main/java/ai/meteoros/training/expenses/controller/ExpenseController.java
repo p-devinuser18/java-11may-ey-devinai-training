@@ -41,7 +41,7 @@ public class ExpenseController {
             throw new InvalidMonthException(month);
         }
         if (category != null && month != null) {
-            log.info("GET /api/expenses called with category and month", category, month);
+            log.info("GET /api/expenses called with category={} and month={}", category, month);
             List<Expense> expenses = expenseService.filterByCategoryandMonth(category, month);
             return ResponseEntity.ok(expenses);
         }
