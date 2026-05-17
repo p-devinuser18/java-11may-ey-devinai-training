@@ -4,6 +4,8 @@ import ai.meteoros.training.expenses.entity.Expense;
 import ai.meteoros.training.expenses.exception.InvalidMonthException;
 import ai.meteoros.training.expenses.service.ExpenseService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,6 +24,8 @@ import java.util.List;
 @RequestMapping("/api")
 public class ExpenseController {
 
+    private static final Logger log = LoggerFactory.getLogger(ExpenseController.class);
+
     private final ExpenseService expenseService;
 
     public ExpenseController(ExpenseService expenseService) {
@@ -37,23 +41,28 @@ public class ExpenseController {
             throw new InvalidMonthException(month);
         }
         if (category != null && month != null) {
+            log.info("GET /api/expenses called with category and month", category, month);
             List<Expense> expenses = expenseService.filterByCategoryandMonth(category, month);
             return ResponseEntity.ok(expenses);
         }
         if (category != null) {
+            log.info("GET /api/expenses called with category={}", category);
             List<Expense> expenses = expenseService.filterByCategory(category);
             return ResponseEntity.ok(expenses);
         }
         if (month != null) {
+            log.info("GET /api/expenses called with month={}", month);
             List<Expense> expenses = expenseService.filterByMonth(month);
             return ResponseEntity.ok(expenses);
         }
+        log.info("GET /api/expenses called");
         List<Expense> expenses = expenseService.findAll();
         return ResponseEntity.ok(expenses);
     }
 
     @PostMapping("/expenses")
     public ResponseEntity<Expense> createExpense(@Valid @RequestBody Expense expense) {
+        log.info("POST /api/expenses called body={}", expense.getDescription());
         Expense created = expenseService.addExpense(expense);
         return ResponseEntity.status(HttpStatus.CREATED).body(created);
     }
@@ -61,12 +70,14 @@ public class ExpenseController {
     @PutMapping("/expenses/{id}")
     public ResponseEntity<Expense> updateExpense(@PathVariable Long id,
                                                   @Valid @RequestBody Expense expense) {
+        log.info("PUT /api/expenses/{} called", id);
         Expense updated = expenseService.updateExpense(id, expense);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/expenses/{id}")
     public ResponseEntity<Void> deleteExpense(@PathVariable Long id) {
+        log.info("DELETE /api/expenses/{} called", id);
         expenseService.delete(id);
         return ResponseEntity.noContent().build();
     }
