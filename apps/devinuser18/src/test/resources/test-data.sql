@@ -1,0 +1,10 @@
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (49.99, 'Food', 'Weekly groceries', '2025-01-10');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (35.00, 'Food', 'Restaurant dinner', '2025-01-20');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (120.00, 'Food', 'Monthly meal prep', '2025-02-01');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (15.50, 'Transport', 'Taxi ride', '2025-03-15');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (60.00, 'Transport', 'Gas station fill-up', '2025-01-05');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (200.00, 'Utilities', 'Electricity bill', '2025-02-10');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (85.00, 'Entertainment', 'Concert tickets', '2025-03-20');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (45.00, 'Entertainment', 'Movie night', '2025-04-12');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (500.00, 'Housing', 'Monthly rent', '2025-05-01');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (30.00, 'Food', 'Snacks and drinks', '2025-05-15');
