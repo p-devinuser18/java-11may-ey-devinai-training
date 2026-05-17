@@ -20,19 +20,35 @@ public class ExpenseService {
         return expenseRepository.findAll();
     }
 
-    public Expense filterByCategory(String category) {
-        return expenseRepository.findAll().stream()
+    public List<Expense> filterByCategory(String category) {
+        List<Expense> result = expenseRepository.findAll().stream()
                 .filter(e -> e.getCategory().equalsIgnoreCase(category))
-                .findFirst()
-                .orElseThrow(() -> new ExpenseNotFoundException(category));
+                .toList();
+        if (result.isEmpty()) {
+            throw new ExpenseNotFoundException(category);
+        }
+        return result;
     }
 
-    public Expense filterByCategoryandMonth(String category, int month) {
-        return expenseRepository.findAll().stream()
+    public List<Expense> filterByMonth(int month) {
+        List<Expense> result = expenseRepository.findAll().stream()
+                .filter(e -> e.getExpenseDate().getMonthValue() == month)
+                .toList();
+        if (result.isEmpty()) {
+            throw new ExpenseNotFoundException("month: " + month);
+        }
+        return result;
+    }
+
+    public List<Expense> filterByCategoryandMonth(String category, int month) {
+        List<Expense> result = expenseRepository.findAll().stream()
                 .filter(e -> e.getCategory().equalsIgnoreCase(category))
                 .filter(e -> e.getExpenseDate().getMonthValue() == month)
-                .findFirst()
-                .orElseThrow(() -> new ExpenseNotFoundException(category, month));
+                .toList();
+        if (result.isEmpty()) {
+            throw new ExpenseNotFoundException(category, month);
+        }
+        return result;
     }
 
     public Expense addExpense(Expense expense) {

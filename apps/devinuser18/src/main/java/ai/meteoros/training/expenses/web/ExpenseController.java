@@ -37,12 +37,16 @@ public class ExpenseController {
             throw new InvalidMonthException(month);
         }
         if (category != null && month != null) {
-            Expense expense = expenseService.filterByCategoryandMonth(category, month);
-            return ResponseEntity.ok(expense);
+            List<Expense> expenses = expenseService.filterByCategoryandMonth(category, month);
+            return ResponseEntity.ok(expenses);
         }
         if (category != null) {
-            Expense expense = expenseService.filterByCategory(category);
-            return ResponseEntity.ok(expense);
+            List<Expense> expenses = expenseService.filterByCategory(category);
+            return ResponseEntity.ok(expenses);
+        }
+        if (month != null) {
+            List<Expense> expenses = expenseService.filterByMonth(month);
+            return ResponseEntity.ok(expenses);
         }
         List<Expense> expenses = expenseService.findAll();
         return ResponseEntity.ok(expenses);
