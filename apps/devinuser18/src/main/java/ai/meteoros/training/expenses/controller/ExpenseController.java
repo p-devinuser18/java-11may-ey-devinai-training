@@ -1,4 +1,4 @@
-package ai.meteoros.training.expenses.web;
+package ai.meteoros.training.expenses.controller;
 
 import ai.meteoros.training.expenses.entity.Expense;
 import ai.meteoros.training.expenses.exception.InvalidMonthException;
