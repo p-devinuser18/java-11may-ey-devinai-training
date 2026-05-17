@@ -2,3 +2,4 @@ INSERT INTO expenses (amount, category, description, expense_date) VALUES (49.99
 INSERT INTO expenses (amount, category, description, expense_date) VALUES (35.00, 'Food', 'Restaurant dinner', '2025-05-20');
 INSERT INTO expenses (amount, category, description, expense_date) VALUES (120.00, 'Food', 'Monthly meal prep', '2025-06-01');
 INSERT INTO expenses (amount, category, description, expense_date) VALUES (15.50, 'Transport', 'Taxi ride', '2025-06-15');
+INSERT INTO expenses (amount, category, description, expense_date) VALUES (10000.00, 'Bill', 'Rent', '2026-04-01');
