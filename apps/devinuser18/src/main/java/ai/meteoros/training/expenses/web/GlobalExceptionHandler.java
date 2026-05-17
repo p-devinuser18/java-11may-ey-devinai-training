@@ -1,6 +1,7 @@
 package ai.meteoros.training.expenses.web;
 
 import ai.meteoros.training.expenses.exception.ExpenseNotFoundException;
+import ai.meteoros.training.expenses.exception.InvalidMonthException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,6 +19,13 @@ public class GlobalExceptionHandler {
         Map<String, String> body = new HashMap<>();
         body.put("error", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
+    }
+
+    @ExceptionHandler(InvalidMonthException.class)
+    public ResponseEntity<Map<String, String>> handleInvalidMonth(InvalidMonthException ex) {
+        Map<String, String> body = new HashMap<>();
+        body.put("error", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

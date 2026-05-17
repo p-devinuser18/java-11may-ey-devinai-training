@@ -1,6 +1,7 @@
 package ai.meteoros.training.expenses.web;
 
 import ai.meteoros.training.expenses.entity.Expense;
+import ai.meteoros.training.expenses.exception.InvalidMonthException;
 import ai.meteoros.training.expenses.service.ExpenseService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -32,6 +33,9 @@ public class ExpenseController {
             @RequestParam(required = false) String category,
             @RequestParam(required = false) Integer month) {
 
+        if (month != null && (month < 1 || month > 12)) {
+            throw new InvalidMonthException(month);
+        }
         if (category != null && month != null) {
             Expense expense = expenseService.filterByCategoryandMonth(category, month);
             return ResponseEntity.ok(expense);
