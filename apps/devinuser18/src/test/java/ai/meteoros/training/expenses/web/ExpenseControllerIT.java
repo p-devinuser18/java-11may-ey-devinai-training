@@ -46,6 +46,13 @@ class ExpenseControllerIT {
     }
 
     @Test
+    void getByMonth_returns_400_and_error_body_when_month_is_invalid() throws Exception {
+        mockMvc.perform(get("/api/expenses").param("month", "13"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").exists());
+    }
+
+    @Test
     void getByMonth_returns_404_and_error_body_when_expense_does_not_exist() throws Exception {
         // December has no expenses
         mockMvc.perform(get("/api/expenses").param("month", "12"))
