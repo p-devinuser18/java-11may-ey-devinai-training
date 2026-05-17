@@ -1380,7 +1380,7 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-          # cache: '____'    ← TODO #1: add this line
+          cache: 'maven'
 
       - name: Build and test
         run: mvn -B clean verify
@@ -1404,6 +1404,15 @@ jobs:
       # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
       # ---------------------------------------------------------------------
 
+      - name: Job summary
+        if: always()
+        run: |
+          echo "### CI summary — devinuser18" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`$GITHUB_HEAD_REF\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **PR base:** \`$GITHUB_BASE_REF\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **App folder:** \`apps/devinuser18\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Status:** \`${{ job.status }}\`" >> $GITHUB_STEP_SUMMARY
+
       # ---------------------------------------------------------------------
       # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
       # Upload target/surefire-reports/ as a workflow artifact so failing
@@ -1418,6 +1427,14 @@ jobs:
       #
       # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
       # ---------------------------------------------------------------------
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-devinuser18
+          path: apps/devinuser18/target/surefire-reports/
+          if-no-files-found: ignore
 
   # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser18   <<<<<<<<<<<<<<<<<<<<<<<<<
 
