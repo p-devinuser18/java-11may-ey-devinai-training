@@ -24,7 +24,7 @@ public class ExpenseService {
         return expenseRepository.findAll().stream()
                 .filter(e -> e.getCategory().equalsIgnoreCase(category))
                 .findFirst()
-                .orElseThrow(() -> new ExpenseNotFoundException(0L));
+                .orElseThrow(() -> new ExpenseNotFoundException(category));
     }
 
     public Expense filterByCategoryandMonth(String category, int month) {
@@ -32,7 +32,7 @@ public class ExpenseService {
                 .filter(e -> e.getCategory().equalsIgnoreCase(category))
                 .filter(e -> e.getExpenseDate().getMonthValue() == month)
                 .findFirst()
-                .orElseThrow(() -> new ExpenseNotFoundException(0L));
+                .orElseThrow(() -> new ExpenseNotFoundException(category, month));
     }
 
     public Expense addExpense(Expense expense) {
