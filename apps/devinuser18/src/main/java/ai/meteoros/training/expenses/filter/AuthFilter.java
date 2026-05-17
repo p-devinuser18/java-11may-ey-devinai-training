@@ -19,7 +19,7 @@ public class AuthFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String path = request.getRequestURI();
 
-        if (path.equals("/health") || path.equals("/metrics")) {
+        if (path.equals("/health")) {
             filterChain.doFilter(request, response);
             return;
         }
