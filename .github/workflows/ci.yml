@@ -1,0 +1,1898 @@
+# ============================================================================
+# Devin AI Training — Monorepo CI
+# ============================================================================
+#
+# This workflow runs ONE per-participant job for each PR, filtered by the
+# branch name. Only the participant whose branch is being PR'd will see
+# their CI job actually execute; the other 23 jobs are skipped (you'll
+# see "Skipped" in the Checks panel, which is normal).
+#
+# WHY THIS STRUCTURE
+# ------------------
+# 24 trainees, 1 repo, 1 workflow file. If everyone appends their own job
+# we get 24 simultaneous merge conflicts in this file. So we pre-populate
+# 24 stubs — one block per participant — and Lab 24 becomes "fill in your
+# stub", not "write a new job from scratch".
+#
+# LAB 24 INSTRUCTIONS — PARTICIPANT VIEW
+# --------------------------------------
+# Find the block labeled "devinuser<YOUR_NUMBER>" below. The block has
+# three TODOs. Complete each on your hardening branch
+# (devinuser<N>/hardening), open a PR against devinuser<N>/integration,
+# and watch your job run.
+#
+#   TODO #1  Enable Maven dependency caching (cuts ~90s off every run)
+#   TODO #2  Add a job-summary step describing your build
+#   TODO #3  (Optional) Upload test reports as a workflow artifact
+#
+# You MUST NOT edit any other participant's block. If your edits touch
+# lines outside the delimiter comments for your own block, the instructor
+# will reject the PR.
+#
+# DOES MY JOB RUN?
+# ----------------
+# Your job runs when the PR head branch starts with "devinuser<N>/".
+# That means any PR from devinuser<N>/scaffold, devinuser<N>/crud-jpa,
+# devinuser<N>/tests-service, devinuser<N>/tests-controller, or
+# devinuser<N>/hardening triggers your job — and only yours.
+# ============================================================================
+
+name: CI — Monorepo Per-Participant
+
+on:
+  pull_request:
+    branches: ['**']
+  push:
+    branches: ['main']
+
+# Cancel in-flight runs on the same branch when a new commit arrives.
+# This stops 5-min Maven builds from stacking up.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser1  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser1@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser1/"  (any feature/integration branch)
+  # Builds:       apps/devinuser1/
+  # ===========================================================================
+  ci-devinuser1:
+    name: CI · devinuser1
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser1/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser1
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser1
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser1`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser1
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser1   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser2  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser2@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser2/"  (any feature/integration branch)
+  # Builds:       apps/devinuser2/
+  # ===========================================================================
+  ci-devinuser2:
+    name: CI · devinuser2
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser2/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser2
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser2
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser2`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser2
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser2   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser3  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser3@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser3/"  (any feature/integration branch)
+  # Builds:       apps/devinuser3/
+  # ===========================================================================
+  ci-devinuser3:
+    name: CI · devinuser3
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser3/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser3
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser3
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser3`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser3
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser3   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser4  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser4@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser4/"  (any feature/integration branch)
+  # Builds:       apps/devinuser4/
+  # ===========================================================================
+  ci-devinuser4:
+    name: CI · devinuser4
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser4/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser4
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser4
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser4`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser4
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser4   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser5  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser5@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser5/"  (any feature/integration branch)
+  # Builds:       apps/devinuser5/
+  # ===========================================================================
+  ci-devinuser5:
+    name: CI · devinuser5
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser5/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser5
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser5`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser5
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser5   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser6  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser6@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser6/"  (any feature/integration branch)
+  # Builds:       apps/devinuser6/
+  # ===========================================================================
+  ci-devinuser6:
+    name: CI · devinuser6
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser6/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser6
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser6
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser6`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser6
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser6   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser7  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser7@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser7/"  (any feature/integration branch)
+  # Builds:       apps/devinuser7/
+  # ===========================================================================
+  ci-devinuser7:
+    name: CI · devinuser7
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser7/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser7
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser7
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser7`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser7
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser7   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser8  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser8@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser8/"  (any feature/integration branch)
+  # Builds:       apps/devinuser8/
+  # ===========================================================================
+  ci-devinuser8:
+    name: CI · devinuser8
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser8/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser8
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser8`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser8
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser8   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser9  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser9@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser9/"  (any feature/integration branch)
+  # Builds:       apps/devinuser9/
+  # ===========================================================================
+  ci-devinuser9:
+    name: CI · devinuser9
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser9/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser9
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser9
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser9`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser9
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser9   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser10  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser10@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser10/"  (any feature/integration branch)
+  # Builds:       apps/devinuser10/
+  # ===========================================================================
+  ci-devinuser10:
+    name: CI · devinuser10
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser10/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser10
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser10`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser10
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser10   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser11  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser11@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser11/"  (any feature/integration branch)
+  # Builds:       apps/devinuser11/
+  # ===========================================================================
+  ci-devinuser11:
+    name: CI · devinuser11
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser11/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser11
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser11
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser11`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser11
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser11   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser12  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser12@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser12/"  (any feature/integration branch)
+  # Builds:       apps/devinuser12/
+  # ===========================================================================
+  ci-devinuser12:
+    name: CI · devinuser12
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser12/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser12
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser12
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser12`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser12
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser12   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser13  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser13@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser13/"  (any feature/integration branch)
+  # Builds:       apps/devinuser13/
+  # ===========================================================================
+  ci-devinuser13:
+    name: CI · devinuser13
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser13/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser13
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser13
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser13`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser13
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser13   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser14  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser14@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser14/"  (any feature/integration branch)
+  # Builds:       apps/devinuser14/
+  # ===========================================================================
+  ci-devinuser14:
+    name: CI · devinuser14
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser14/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser14
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser14
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser14`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser14
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser14   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser15  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser15@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser15/"  (any feature/integration branch)
+  # Builds:       apps/devinuser15/
+  # ===========================================================================
+  ci-devinuser15:
+    name: CI · devinuser15
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser15/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser15
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser15`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser15
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser15   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser16  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser16@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser16/"  (any feature/integration branch)
+  # Builds:       apps/devinuser16/
+  # ===========================================================================
+  ci-devinuser16:
+    name: CI · devinuser16
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser16/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser16
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser16
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser16`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser16
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser16   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser17  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser17@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser17/"  (any feature/integration branch)
+  # Builds:       apps/devinuser17/
+  # ===========================================================================
+  ci-devinuser17:
+    name: CI · devinuser17
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser17/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser17
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser17
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser17`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser17
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser17   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser18  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser18@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser18/"  (any feature/integration branch)
+  # Builds:       apps/devinuser18/
+  # ===========================================================================
+  ci-devinuser18:
+    name: CI · devinuser18
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser18/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser18
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser18
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser18`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser18
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser18   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser19  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser19@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser19/"  (any feature/integration branch)
+  # Builds:       apps/devinuser19/
+  # ===========================================================================
+  ci-devinuser19:
+    name: CI · devinuser19
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser19/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser19
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser19
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser19`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser19
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser19   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser20  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser20@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser20/"  (any feature/integration branch)
+  # Builds:       apps/devinuser20/
+  # ===========================================================================
+  ci-devinuser20:
+    name: CI · devinuser20
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser20/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser20
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser20`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser20
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser20   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser21  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser21@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser21/"  (any feature/integration branch)
+  # Builds:       apps/devinuser21/
+  # ===========================================================================
+  ci-devinuser21:
+    name: CI · devinuser21
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser21/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser21
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser21
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser21`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser21
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser21   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser22  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser22@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser22/"  (any feature/integration branch)
+  # Builds:       apps/devinuser22/
+  # ===========================================================================
+  ci-devinuser22:
+    name: CI · devinuser22
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser22/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser22
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser22
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser22`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser22
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser22   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser23  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser23@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser23/"  (any feature/integration branch)
+  # Builds:       apps/devinuser23/
+  # ===========================================================================
+  ci-devinuser23:
+    name: CI · devinuser23
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser23/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser23
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser23
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser23`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser23
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser23   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # >>>>>>>>>>>>>>>>>>>>>>>>>  BEGIN devinuser24  <<<<<<<<<<<<<<<<<<<<<<<<<
+  # Owner: devinuser24@meteoros.ai
+  # Triggers on:  head ref starts with "devinuser24/"  (any feature/integration branch)
+  # Builds:       apps/devinuser24/
+  # ===========================================================================
+  ci-devinuser24:
+    name: CI · devinuser24
+    if: github.event_name == 'pull_request' && startsWith(github.head_ref, 'devinuser24/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: apps/devinuser24
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #1  (required)
+      # Enable Maven dependency caching. Without this, every run re-downloads
+      # ~50MB of dependencies from Maven Central (~90s wasted).
+      #
+      # Add ONE line below the "distribution:" line:
+      #
+      #     cache: 'maven'
+      #
+      # Verify after merging by checking the "Set up JDK 17" step logs — you
+      # should see "Cache restored" or "Cache saved" messages.
+      # ---------------------------------------------------------------------
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          # cache: '____'    ← TODO #1: add this line
+
+      - name: Build and test
+        run: mvn -B clean verify
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #2  (required)
+      # Append a markdown summary to $GITHUB_STEP_SUMMARY so the GitHub
+      # Actions UI shows a friendly summary of your build at a glance.
+      #
+      # Add a step here that:
+      #   - runs even when tests fail (use:  if: always())
+      #   - writes at least these lines to $GITHUB_STEP_SUMMARY:
+      #       ### CI summary — devinuser24
+      #       - Branch: `$GITHUB_HEAD_REF`
+      #       - PR base: `$GITHUB_BASE_REF`
+      #       - App folder: `apps/devinuser24`
+      #
+      # Hint: a "run" step with multiple "echo ... >> $GITHUB_STEP_SUMMARY"
+      # lines is the simplest form.
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+      # ---------------------------------------------------------------------
+      # Lab 24 — TODO #3  (optional — only if you finish #1 and #2 with time)
+      # Upload target/surefire-reports/ as a workflow artifact so failing
+      # test XML/HTML reports are downloadable from the run's summary page.
+      #
+      # Use actions/upload-artifact@v4. Suggested artifact name:
+      #     test-results-devinuser24
+      # Path:
+      #     target/surefire-reports/
+      # Must run on failure too:
+      #     if: always()
+      #
+      # ADD YOUR STEP BELOW THIS COMMENT BLOCK:
+      # ---------------------------------------------------------------------
+
+  # >>>>>>>>>>>>>>>>>>>>>>>>>   END devinuser24   <<<<<<<<<<<<<<<<<<<<<<<<<
+
+  # ===========================================================================
+  # Always-on meta-check.
+  # Branch protection rules can require "ci-meta" as a required check.
+  # Per-participant jobs are gated by branch name (above), so they show
+  # "Skipped" on other participants' PRs. A "Skipped" status will NOT
+  # satisfy "Required" branch protection — but ci-meta always passes,
+  # so use it as your required check.
+  # ===========================================================================
+  ci-meta:
+    name: CI · meta (always passes)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Identify which participant ran
+        run: |
+          echo "Workflow:    ${{ github.workflow }}"
+          echo "Event:       ${{ github.event_name }}"
+          echo "Head ref:    ${{ github.head_ref }}"
+          echo "Base ref:    ${{ github.base_ref }}"
+          echo "Actor:       ${{ github.actor }}"
